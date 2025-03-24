@@ -33,8 +33,8 @@ const app = express();
 
 // CORS configuration
 const corsOptions = {
-  origin: process.env.NODE_ENV === 'production' 
-    ? ['https://yourdomain.com', 'http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:5176'] 
+  origin: process.env.NODE_ENV === 'production'
+    ? process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : '*'
     : ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:5176'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -78,7 +78,18 @@ const startServer = async () => {
     app.use('/api/reviews', require('./routes/reviewRoutes'));
     app.use('/api/admin', require('./routes/adminRoutes'));
 
-    // Error handling
+    // Serve static files in production
+    if (process.env.NODE_ENV === 'production') {
+      // Set static folder
+      app.use(express.static(path.join(__dirname, '../client/dist')));
+
+      // Handle client routing - serve index.html for any non-api routes
+      app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, '../client/dist', 'index.html'));
+      });
+    }
+
+    // Error handling for API routes
     app.use((req, res, next) => {
       res.status(404);
       throw new Error(`Not Found - ${req.originalUrl}`);
