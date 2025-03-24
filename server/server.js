@@ -97,12 +97,19 @@ const startServer = async () => {
     // Serve static files in production
     if (process.env.NODE_ENV === 'production') {
       // Set static folder
-      const clientPath = process.env.CLIENT_PATH || path.join(__dirname, '../client/dist');
+      // In production, serve from the dist directory within the app's root
+      const clientPath = path.resolve(process.env.CLIENT_PATH || path.join(__dirname, '../client/dist'));
+      
+      // Ensure the directory exists and log its location
+      console.log('Serving static files from:', clientPath);
+      
       app.use(express.static(clientPath));
 
       // Handle client routing - serve index.html for any non-api routes
       app.get('*', (req, res) => {
-        res.sendFile(path.join(clientPath, 'index.html'));
+        const indexPath = path.join(clientPath, 'index.html');
+        console.log('Attempting to serve:', indexPath);
+        res.sendFile(indexPath, { root: '/' });
       });
     }
 

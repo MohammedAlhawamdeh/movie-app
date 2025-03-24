@@ -11,7 +11,7 @@
     "build:client": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
     "build:server": "NPM_CONFIG_PRODUCTION=false npm install --prefix server",
     "build": "npm run build:client && npm run build:server",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client && npm install --prefix server"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client && cp -r client/dist server/ && npm install --prefix server"
   },
   "keywords": [
     "movie",
