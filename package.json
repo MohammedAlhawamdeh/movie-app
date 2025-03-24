@@ -1,0 +1,21 @@
+{
+  "name": "movie-app",
+  "version": "1.0.0",
+  "description": "Movie App with TMDB API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "dev": "concurrently --kill-others-on-fail --prefix \"[{name}]\" --names \"SERVER,CLIENT\" --prefix-colors \"yellow.bold,cyan.bold\" \"npm run server\" \"npm run client\"",
+    "install-all": "npm install && cd server && npm install && cd ../client && npm install",
+    "postinstall": "npm run install-all"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3"
+  }
+}
