@@ -97,11 +97,12 @@ const startServer = async () => {
     // Serve static files in production
     if (process.env.NODE_ENV === 'production') {
       // Set static folder
-      app.use(express.static(path.join(__dirname, '../client/dist')));
+      const clientPath = process.env.CLIENT_PATH || path.join(__dirname, '../client/dist');
+      app.use(express.static(clientPath));
 
       // Handle client routing - serve index.html for any non-api routes
       app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, '../client/dist', 'index.html'));
+        res.sendFile(path.join(clientPath, 'index.html'));
       });
     }
 
